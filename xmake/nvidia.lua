@@ -12,6 +12,12 @@ target("llaisys-device-nvidia")
     -- CUDA source files
     add_files("../src/device/nvidia/*.cu")
 
+    -- Add stub implementations for ops (placeholders for future CUDA kernels)
+    add_files("../src/ops/*/nvidia/*.cu")
+
+    -- Ensure PIC for shared library linking
+    add_cuflags("-Xcompiler=-fPIC")
+
     -- Link against CUDA runtime. xmake will use nvcc for .cu files if available.
     add_links("cudart")
 

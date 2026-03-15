@@ -5,6 +5,10 @@
 
 #include "cpu/linear_cpu.hpp"
 
+#ifdef ENABLE_NVIDIA_API
+#include "nvidia/linear_nvidia.hpp"
+#endif
+
 namespace llaisys::ops {
 void linear(tensor_t out, tensor_t in, tensor_t weight, tensor_t bias = nullptr) {
     // C[:,M,N] = A[:,M,K] * B[:,K,N]
@@ -54,8 +58,7 @@ void linear(tensor_t out, tensor_t in, tensor_t weight, tensor_t bias = nullptr)
         return cpu::linear(out->data(), in->data(), weight->data(), nullptr, M, N, K, weight->dtype());
 #ifdef ENABLE_NVIDIA_API
     case LLAISYS_DEVICE_NVIDIA:
-        TO_BE_IMPLEMENTED();
-        return;
+        return nvidia::linear(out, in, weight, bias);
 #endif
     default:
         EXCEPTION_UNSUPPORTED_DEVICE;
